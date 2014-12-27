@@ -61,8 +61,8 @@ static void printout(task **tasks_ref, int fitness, int is_initial) {
   char buffer[50+ITEMS*(4*sizeof(int)+8*sizeof(char))+1], *start = buffer;
 
   start += sprintf(start,is_initial ? \
-         "\nPocatecni rozvrh (Id: Pj, Dj, Wj):\n" : \
-         "\nNejlepsi rozvrh (Id: Pj, Dj, Wj):\n");
+         "\nInitial schedule (Id: Pj, Dj, Wj):\n" : \
+         "\nBest schedule (Id: Pj, Dj, Wj):\n");
   for (ende = tasks_ref+ITEMS; tasks_ref<ende; tasks_ref++)
     start += sprintf(start,"%2d: %2d, %3d, %2d\n",
       (*tasks_ref)->id,(*tasks_ref)->pj,(*tasks_ref)->dj,(*tasks_ref)->wj);
@@ -70,7 +70,7 @@ static void printout(task **tasks_ref, int fitness, int is_initial) {
   puts(buffer);
 
   if (is_initial) {
-    puts("Iteracni krok: nejlepsi rozvrh, (fitness):");
+    puts("Iteration step: best schedule, (fitness):");
     iter_printout(tasks_ref-ITEMS,fitness,0);
   }
 }
