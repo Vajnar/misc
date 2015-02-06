@@ -46,7 +46,7 @@ static task tasks_initial[ITEMS] = { {16,  67, 45,  2},
 
 static void iter_printout(task **tasks, int fitness, int iter) {
   task **end;
-  char buffer[(ITEMS+2)*(sizeof(int)+2*sizeof(char))+1], *start = buffer;
+  char buffer[200], *start = buffer;
 
   start += sprintf(start,"%3d: ",iter);
   for(end=tasks+ITEMS;tasks<end;tasks++)
@@ -58,21 +58,16 @@ static void iter_printout(task **tasks, int fitness, int iter) {
 
 static void printout(task **tasks_ref, int fitness, int is_initial) {
   task **ende;
-  char buffer[50+ITEMS*(4*sizeof(int)+8*sizeof(char))+1], *start = buffer;
+  char buffer[500], *start = buffer;
 
-  start += sprintf(start,is_initial ? \
-         "\nInitial schedule (Id: Pj, Dj, Wj):\n" : \
-         "\nBest schedule (Id: Pj, Dj, Wj):\n");
+  start += sprintf(start,"Initial schedule (Id: Pj, Dj, Wj):\n");
   for (ende = tasks_ref+ITEMS; tasks_ref<ende; tasks_ref++)
     start += sprintf(start,"%2d: %2d, %3d, %2d\n",
       (*tasks_ref)->id,(*tasks_ref)->pj,(*tasks_ref)->dj,(*tasks_ref)->wj);
-  sprintf(start,"Fitness: %d\n",fitness);
+  sprintf(start,"Fitness: %d\n\nIteration step: best schedule, (fitness):",fitness);
   puts(buffer);
 
-  if (is_initial) {
-    puts("Iteration step: best schedule, (fitness):");
-    iter_printout(tasks_ref-ITEMS,fitness,0);
-  }
+  iter_printout(tasks_ref-ITEMS,fitness,0);
 }
 
 static void swap(task **a) {
@@ -141,7 +136,7 @@ static int compute_fitness(task *a, task *b, int fitness_prev_it, int time) {
 }
 
 int main(void) {
-  int i, fitness_best, fitness_prev_it;
+  int i, fitness_best, fitness_prev_it, pass;
   task *tasks_best[ITEMS], *tasks_prev_it[ITEMS];
 
   for (i=0; i<ITEMS; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
@@ -149,7 +144,7 @@ int main(void) {
   fitness_best = fitness_prev_it = compute_initial_fitness();
   printout(tasks_best,fitness_best,1);
 
-  for (i=0; i<NUM_CYCLES; i++) {
+  for (i=1; i<=NUM_CYCLES; i++) {
     int j, time = 0, fitness_curr_it = INT_MAX;
     task **tasks_temp, **perm;
 
@@ -175,11 +170,14 @@ int main(void) {
     if (fitness_curr_it < fitness_best) {
       fitness_best = fitness_curr_it;
       for (j=0;j<ITEMS;j++) tasks_best[j] = tasks_prev_it[j];
+      pass = i;
     }
 
-    iter_printout(tasks_prev_it,fitness_curr_it,i+1);
+    iter_printout(tasks_prev_it,fitness_curr_it,i);
   }
-  printout(tasks_best,fitness_best,0);
+
+  puts("\nBest schedule:");
+  iter_printout(tasks_best,fitness_best,pass);
 
   return 0;
 }
