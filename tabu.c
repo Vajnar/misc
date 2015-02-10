@@ -56,7 +56,7 @@ static void iter_printout(task **tasks, int fitness, int iter) {
   puts(buffer);
 }
 
-static void printout(task **tasks_ref, int fitness, int is_initial) {
+static void printout(task **tasks_ref, int fitness) {
   task **ende;
   char buffer[500], *start = buffer;
 
@@ -144,13 +144,13 @@ int main(void) {
   for (i=0; i<ITEMS; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
 
   fitness_best = fitness_prev_it = compute_initial_fitness();
-  printout(tasks_best,fitness_best,1);
+  printout(tasks_best,fitness_best);
 
   for (i=1; i<=NUM_CYCLES; i++) {
     int j, time = 0, fitness_curr_it = INT_MAX;
     task **tasks_temp, **perm;
 
-    for (tasks_temp=tasks_prev_it; tasks_temp<tasks_prev_it+ITEMS-1; 
+    for (tasks_temp=tasks_prev_it; tasks_temp<tasks_prev_it+ITEMS-1;
          time+=(*tasks_temp++)->pj) {
       int fitness_temp;
 
