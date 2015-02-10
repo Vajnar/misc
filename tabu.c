@@ -92,8 +92,10 @@ static void add_to_tabu(task *a, task *b) {
 #if TABU_LENGTH > 1
   static task **temp = tabu;
 
-  if (temp > tabu+TABU_LENGTH*2-1) temp = tabu;
-  *temp = a; *(temp+1) = b; temp+=2;
+  *temp = a; *(temp+1) = b;
+
+  if (temp == tabu+(TABU_LENGTH-1)*2) temp = tabu;
+  else temp+=2;
 #elif TABU_LENGTH == 1
   *tabu = a; *(tabu+1) = b;
 #endif
