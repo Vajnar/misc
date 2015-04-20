@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <limits.h>
 
 #define ITEMS        15
@@ -138,7 +139,7 @@ static int compute_fitness(task *a, task *b, int fitness_prev_it, int time) {
 }
 
 int main(void) {
-  int i, fitness_best, fitness_prev_it, pass;
+  int i, fitness_best, fitness_prev_it, pass = 0;
   task *tasks_best[ITEMS], *tasks_prev_it[ITEMS];
 
   for (i=0; i<ITEMS; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
@@ -147,7 +148,7 @@ int main(void) {
   printout(tasks_best,fitness_best);
 
   for (i=1; i<=NUM_CYCLES; i++) {
-    int j, time = 0, fitness_curr_it = INT_MAX;
+    int time = 0, fitness_curr_it = INT_MAX;
     task **tasks_temp, **perm;
 
     for (tasks_temp=tasks_prev_it; tasks_temp<tasks_prev_it+ITEMS-1;
@@ -171,7 +172,7 @@ int main(void) {
 
     if (fitness_curr_it < fitness_best) {
       fitness_best = fitness_curr_it;
-      for (j=0;j<ITEMS;j++) tasks_best[j] = tasks_prev_it[j];
+      memcpy(tasks_best,tasks_prev_it,sizeof(tasks_best));
       pass = i;
     }
 
