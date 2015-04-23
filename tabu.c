@@ -166,8 +166,6 @@ int main(void) {
       }
     }
 
-    swap(perm);
-    add_to_tabu(*perm,*(perm+1));
     fitness_prev_it = fitness_curr_it;
 
     if (fitness_curr_it < fitness_best) {
@@ -175,6 +173,9 @@ int main(void) {
       memcpy(tasks_best,tasks_prev_it,sizeof(tasks_best));
       pass = i;
     }
+
+    swap(perm);
+    add_to_tabu(*perm,*(perm+1));
 
     iter_printout(tasks_prev_it,fitness_curr_it,i);
   }
