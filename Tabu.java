@@ -1,5 +1,3 @@
-package tabu;
-
 public class Tabu {
 
 	static final int TABU_LENGTH = 11;
@@ -158,7 +156,7 @@ public class Tabu {
 			if (fitness_curr_it < fitness_best) {
 				fitness_best = fitness_curr_it;
 				pass = i;
-				for (j=0;j<tasks_prev_it.length;j++) tasks_best[j] = tasks_prev_it[j];
+				tasks_best = tasks_prev_it.clone();
 			}
 
 			iter_printout(tasks_prev_it,fitness_curr_it,i);
