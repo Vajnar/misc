@@ -142,9 +142,8 @@ int main(void) {
   int i, fitness_best, fitness_prev_it, pass = 0;
   task *tasks_best[ITEMS], *tasks_prev_it[ITEMS];
 
-  for (i=0; i<ITEMS; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
-
   fitness_best = fitness_prev_it = compute_initial_fitness();
+  for (i=0; i<ITEMS; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
   printout(tasks_best,fitness_best);
 
   for (i=1; i<=NUM_CYCLES; i++) {
