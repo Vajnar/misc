@@ -158,7 +158,6 @@ int main(void) {
         continue;
 
       fitness_temp = compute_fitness(*tasks_temp,*(tasks_temp+1),fitness_prev_it,time);
-
       if (fitness_temp < fitness_curr_it) {
         fitness_curr_it = fitness_temp;
         perm = tasks_temp;
@@ -166,7 +165,6 @@ int main(void) {
     }
 
     fitness_prev_it = fitness_curr_it;
-
     if (fitness_curr_it < fitness_best) {
       fitness_best = fitness_curr_it;
       memcpy(tasks_best,tasks_prev_it,sizeof(tasks_best));
