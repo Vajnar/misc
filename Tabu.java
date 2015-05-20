@@ -54,7 +54,7 @@ public class Tabu {
 	}
 
 	static void printout(Task[] tasks, int fitness) {
-		String buffer = String.format("Initial schedule (Id: Pj, Dj, Wj):\n");
+		String buffer = "Initial schedule (Id: Pj, Dj, Wj):\n";
 
 		for (Task task : tasks)
 			buffer += task;
