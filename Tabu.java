@@ -127,9 +127,8 @@ public class Tabu {
 		int i, fitness_best, fitness_prev_it, pass = 0;
 		Task[] tasks_best = new Task[tasks_initial.length], tasks_prev_it = new Task[tasks_initial.length];
 
-		for (i=0; i<tasks_prev_it.length; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial[i];
-
 		fitness_best = fitness_prev_it = compute_initial_fitness();
+		for (i=0; i<tasks_prev_it.length; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial[i];
 		printout(tasks_best,fitness_best);
 
 		for (i=1; i<=PASSES; i++) {
@@ -142,29 +141,28 @@ public class Tabu {
 					continue;
 
 				fitness_temp = compute_fitness(tasks_prev_it[j],tasks_prev_it[j+1],fitness_prev_it,time);
-
 				if (fitness_temp < fitness_curr_it) {
 					fitness_curr_it = fitness_temp;
 					perm = j;
 				}
 			}
 
-			swap(tasks_prev_it,perm);
-			add_to_tabu(tasks_prev_it[perm],tasks_prev_it[perm+1]);
 			fitness_prev_it = fitness_curr_it;
-
 			if (fitness_curr_it < fitness_best) {
 				fitness_best = fitness_curr_it;
-				pass = i;
 				tasks_best = tasks_prev_it.clone();
+				pass = i;
 			}
+
+			swap(tasks_prev_it,perm);
+			add_to_tabu(tasks_prev_it[perm],tasks_prev_it[perm+1]);
 
 			iter_printout(tasks_prev_it,fitness_curr_it,i);
 		}
 
 		System.out.println("\nBest schedule:");
 		iter_printout(tasks_best,fitness_best,pass);
-	    }
+	}
 }
 
 class Task {
