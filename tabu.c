@@ -1,9 +1,9 @@
 /*
  * Efficient Tabu search algorithm implementation
  * for solving Pj, Dj, Wj problems with respect
- * to minimizing total tardiness
+ * to minimizing total weighted tardiness
  *
- * by Martin Vajnar, 2013
+ * by Martin Vajnar, 2013-5
  *
  */
 
@@ -164,15 +164,15 @@ int main(void) {
       }
     }
 
+    swap(perm);
+    add_to_tabu(*perm,*(perm+1));
+
     fitness_prev_it = fitness_curr_it;
     if (fitness_curr_it < fitness_best) {
       fitness_best = fitness_curr_it;
       memcpy(tasks_best,tasks_prev_it,sizeof(tasks_best));
       pass = i;
     }
-
-    swap(perm);
-    add_to_tabu(*perm,*(perm+1));
 
     iter_printout(tasks_prev_it,fitness_curr_it,i);
   }
