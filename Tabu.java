@@ -1,3 +1,12 @@
+/*
+ * Efficient Tabu search algorithm implementation
+ * for solving Pj, Dj, Wj problems with respect
+ * to minimizing total weighted tardiness
+ *
+ * by Martin Vajnar, 2013-5
+ *
+ */
+
 public class Tabu {
 
 	static final int TABU_LENGTH = 11;
