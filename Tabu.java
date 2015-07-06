@@ -147,15 +147,15 @@ public class Tabu {
 				}
 			}
 
+			swap(tasks_prev_it,perm);
+			add_to_tabu(tasks_prev_it[perm],tasks_prev_it[perm+1]);
+
 			fitness_prev_it = fitness_curr_it;
 			if (fitness_curr_it < fitness_best) {
 				fitness_best = fitness_curr_it;
 				tasks_best = tasks_prev_it.clone();
 				pass = i;
 			}
-
-			swap(tasks_prev_it,perm);
-			add_to_tabu(tasks_prev_it[perm],tasks_prev_it[perm+1]);
 
 			iter_printout(tasks_prev_it,fitness_curr_it,i);
 		}
