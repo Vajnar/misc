@@ -26,6 +26,11 @@ public class Tabu {
 	static {
 		int id=1, pj=1, dj=1, wj=1;
 
+		if (TABU_LENGTH >= (tasks_initial.length * (tasks_initial.length - 1)) / 2) {
+			System.err.println("Tabu list is too long.");
+			System.exit(1);
+		}
+
 		for(Task task : tasks_initial) {
 			if (task.id > id)
 				id = task.id;
