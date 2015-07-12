@@ -138,23 +138,21 @@ public class Tabu {
 	}
 
 	public static void main(String[] args) {
-		int i, fitness_best, fitness_prev_it, pass = 0;
+		int fitness_best, fitness_prev_it, pass = 0;
 		Task[] tasks_best = new Task[tasks_initial.length], tasks_prev_it = new Task[tasks_initial.length];
 
 		fitness_best = fitness_prev_it = compute_initial_fitness();
-		for (i=0; i<tasks_prev_it.length; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial[i];
+		for (int i = 0; i < tasks_prev_it.length; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial[i];
 		printout(tasks_best,fitness_best);
 
-		for (i=1; i<=PASSES; i++) {
-			int j, perm = -1, time = 0, fitness_curr_it = Integer.MAX_VALUE;
+		for (int i = 1; i <= PASSES; i++) {
+			int perm = -1, fitness_curr_it = Integer.MAX_VALUE;
 
-			for (j=0; j<tasks_prev_it.length-1; time+=tasks_prev_it[j++].pj) {
-				int fitness_temp;
-
+			for (int j = 0, time = 0; j < tasks_prev_it.length-1; time += tasks_prev_it[j++].pj) {
 				if (is_in_tabu(tasks_prev_it[j],tasks_prev_it[j+1]))
 					continue;
 
-				fitness_temp = compute_fitness(tasks_prev_it[j],tasks_prev_it[j+1],fitness_prev_it,time);
+				int fitness_temp = compute_fitness(tasks_prev_it[j],tasks_prev_it[j+1],fitness_prev_it,time);
 				if (fitness_temp < fitness_curr_it) {
 					fitness_curr_it = fitness_temp;
 					perm = j;
