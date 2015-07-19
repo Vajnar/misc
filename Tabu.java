@@ -139,10 +139,9 @@ public class Tabu {
 
 	public static void main(String[] args) {
 		int fitness_best, fitness_prev_it, pass = 0;
-		Task[] tasks_best = new Task[tasks_initial.length], tasks_prev_it = new Task[tasks_initial.length];
+		Task[] tasks_best = tasks_initial, tasks_prev_it = tasks_initial;
 
 		fitness_best = fitness_prev_it = compute_initial_fitness();
-		for (int i = 0; i < tasks_prev_it.length; i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial[i];
 		printout(tasks_best,fitness_best);
 
 		for (int i = 1; i <= PASSES; i++) {
