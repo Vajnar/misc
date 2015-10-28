@@ -63,6 +63,7 @@ static void printout(task **tasks_ref, int fitness) {
     start += sprintf(start, "%2d: %2d, %3d, %2d\n",
       (*tasks_ref)->id, (*tasks_ref)->pj, (*tasks_ref)->dj, (*tasks_ref)->wj);
   sprintf(start, "Fitness: %d\n\nIteration step: best schedule, (fitness):", fitness);
+
   puts(buffer);
 
   iter_printout(tasks_ref - ARRAY_SIZE(tasks_initial), fitness, 0);
@@ -90,20 +91,25 @@ static void add_to_tabu(task *a, task *b) {
 #if TABU_LENGTH > 1
   static task **temp = tabu;
 
-  *temp = a; *(temp + 1) = b;
+  *temp = a;
+  *(temp + 1) = b;
 
-  if (temp == tabu + (TABU_LENGTH - 1) * 2) temp = tabu;
-  else temp += 2;
+  if (temp == tabu + (TABU_LENGTH - 1) * 2)
+    temp = tabu;
+  else
+    temp += 2;
 #elif TABU_LENGTH == 1
-  *tabu = a; *(tabu + 1) = b;
+  *tabu = a;
+  *(tabu + 1) = b;
 #endif
 }
 
 static int compute_initial_fitness(void) {
-  task *temp = tasks_initial;
-  int time = temp->pj, fitness = 0;
+  task *temp;
+  int time, fitness;
 
-  for (; temp < tasks_initial + ARRAY_SIZE(tasks_initial);
+  for (temp = tasks_initial, time = temp->pj, fitness = 0;
+       temp < tasks_initial + ARRAY_SIZE(tasks_initial);
        time += (++temp)->pj) {
     int tj;
 
@@ -144,16 +150,17 @@ int main(void) {
                 "Tabu list is too long.");
 
   fitness_best = fitness_prev_it = compute_initial_fitness();
-  for (; i < ARRAY_SIZE(tasks_initial); i++)
+  for (i = 0; i < ARRAY_SIZE(tasks_initial); i++)
     tasks_best[i] = tasks_prev_it[i] = &tasks_initial[i];
 
   printout(tasks_best, fitness_best);
 
   for (i = 1; i <= ITERATIONS; i++) {
-    int time = 0, fitness_curr_it = INT_MAX;
+    int time, fitness_curr_it;
     task **tasks_temp, **perm;
 
-    for (tasks_temp = tasks_prev_it; tasks_temp < tasks_prev_it + ARRAY_SIZE(tasks_initial) - 1;
+    for (time = 0, tasks_temp = tasks_prev_it, fitness_curr_it = INT_MAX;
+         tasks_temp < tasks_prev_it + ARRAY_SIZE(tasks_initial) - 1;
          time += (*tasks_temp++)->pj) {
       int fitness_temp;
 
