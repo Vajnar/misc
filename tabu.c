@@ -100,13 +100,13 @@ static void add_to_tabu(task *a, task *b) {
 }
 
 static int compute_initial_fitness(void) {
-  task *temp;
-  int time = 0, fitness = 0;
+  task *temp = tasks_initial;
+  int time = temp->pj, fitness = 0;
 
-  for (temp = tasks_initial; temp < tasks_initial + ARRAY_SIZE(tasks_initial); temp++) {
+  for (; temp < tasks_initial + ARRAY_SIZE(tasks_initial);
+       time += (++temp)->pj) {
     int tj;
 
-    time += temp->pj;
     if ((tj = time - temp->dj) > 0)
       fitness += tj * temp->wj;
   }
