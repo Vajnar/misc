@@ -144,7 +144,9 @@ int main(void) {
                 "Tabu list is too long.");
 
   fitness_best = fitness_prev_it = compute_initial_fitness();
-  for (i = 0; i < ARRAY_SIZE(tasks_initial); i++) tasks_best[i] = tasks_prev_it[i] = tasks_initial+i;
+  for (; i < ARRAY_SIZE(tasks_initial); i++)
+    tasks_best[i] = tasks_prev_it[i] = &tasks_initial[i];
+
   printout(tasks_best, fitness_best);
 
   for (i = 1; i <= ITERATIONS; i++) {
