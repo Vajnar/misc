@@ -162,15 +162,12 @@ int main(void) {
     for (time = 0, tasks_temp = tasks_prev_it, fitness_curr_it = INT_MAX;
          tasks_temp < tasks_prev_it + ARRAY_SIZE(tasks_initial) - 1;
          time += (*tasks_temp++)->pj) {
-      int fitness_temp;
-
-      if (is_in_tabu(*tasks_temp, *(tasks_temp+1)))
-        continue;
-
-      fitness_temp = compute_fitness(*tasks_temp, *(tasks_temp+1), fitness_prev_it, time);
-      if (fitness_temp < fitness_curr_it) {
-        fitness_curr_it = fitness_temp;
-        perm = tasks_temp;
+      if (!is_in_tabu(*tasks_temp, *(tasks_temp+1))) {
+        int fitness_temp = compute_fitness(*tasks_temp, *(tasks_temp+1), fitness_prev_it, time);
+        if (fitness_temp < fitness_curr_it) {
+          fitness_curr_it = fitness_temp;
+          perm = tasks_temp;
+        }
       }
     }
 
