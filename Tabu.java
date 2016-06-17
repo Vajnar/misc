@@ -148,13 +148,12 @@ public class Tabu {
 			int perm = -1, fitness_curr_it = Integer.MAX_VALUE;
 
 			for (int j = 0, time = 0; j < tasks_prev_it.length-1; time += tasks_prev_it[j++].pj) {
-				if (is_in_tabu(tasks_prev_it[j],tasks_prev_it[j+1]))
-					continue;
-
-				int fitness_temp = compute_fitness(tasks_prev_it[j],tasks_prev_it[j+1],fitness_prev_it,time);
-				if (fitness_temp < fitness_curr_it) {
-					fitness_curr_it = fitness_temp;
-					perm = j;
+				if (!is_in_tabu(tasks_prev_it[j],tasks_prev_it[j+1])) {
+					int fitness_temp = compute_fitness(tasks_prev_it[j],tasks_prev_it[j+1],fitness_prev_it,time);
+					if (fitness_temp < fitness_curr_it) {
+						fitness_curr_it = fitness_temp;
+						perm = j;
+					}
 				}
 			}
 
