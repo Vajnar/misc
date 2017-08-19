@@ -76,7 +76,7 @@ static void swap(task **a) {
   *(a+1) = temp;
 }
 
-static int is_in_tabu(task *a, task *b) {
+static int is_in_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 0
   task **temp;
 
@@ -87,7 +87,7 @@ static int is_in_tabu(task *a, task *b) {
   return 0;
 }
 
-static void add_to_tabu(task *a, task *b) {
+static void add_to_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 1
   static task **temp = tabu;
 
@@ -119,7 +119,7 @@ static int compute_initial_fitness(void) {
   return fitness;
 }
 
-static int compute_fitness(task *a, task *b, int fitness_prev_it, int time) {
+static int compute_fitness(task* restrict a, task* restrict b, int fitness_prev_it, int time) {
   int tj;
 
   time += a->pj;
