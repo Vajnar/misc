@@ -70,18 +70,18 @@ static void printout(task **tasks_ref, int fitness) {
 }
 
 static void swap(task **a) {
-  task *temp = *a;
+  task *temp = a[0];
 
-  *a = *(a+1);
-  *(a+1) = temp;
+  a[0] = a[1];
+  a[1] = temp;
 }
 
 static int is_in_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 0
   task **temp;
 
-  for (temp = tabu; temp < tabu + TABU_LENGTH * 2; temp += 2)
-    if (*temp == a && *(temp + 1) == b)
+  for (temp = tabu; temp < tabu + ARRAY_SIZE(tabu); temp += 2)
+    if (temp[0] == a && temp[1] == b)
       return 1;
 #endif
   return 0;
@@ -91,22 +91,22 @@ static void add_to_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 1
   static task **temp = tabu;
 
-  *temp = a;
-  *(temp + 1) = b;
+  temp[0] = a;
+  temp[1] = b;
 
-  if (temp == tabu + (TABU_LENGTH - 1) * 2)
+  if (temp == tabu + ARRAY_SIZE(tabu)-2)
     temp = tabu;
   else
     temp += 2;
 #elif TABU_LENGTH == 1
-  *tabu = a;
-  *(tabu + 1) = b;
+  tabu[0] = a;
+  tabu[1] = b;
 #endif
 }
 
-static int compute_initial_fitness(void) {
+static unsigned int compute_initial_fitness(void) {
   task *temp;
-  int time, fitness;
+  unsigned int time, fitness;
 
   for (temp = tasks_initial, time = temp->pj, fitness = 0;
        temp < tasks_initial + ARRAY_SIZE(tasks_initial);
@@ -119,7 +119,7 @@ static int compute_initial_fitness(void) {
   return fitness;
 }
 
-static int compute_fitness(task* restrict a, task* restrict b, int fitness_prev_it, int time) {
+static unsigned int compute_fitness(task* restrict a, task* restrict b, unsigned int fitness_prev_it, unsigned int time) {
   int tj;
 
   time += a->pj;
@@ -142,7 +142,7 @@ static int compute_fitness(task* restrict a, task* restrict b, int fitness_prev_
 }
 
 int main(void) {
-  int i, fitness_best, fitness_prev_it, pass = 0;
+  unsigned int i, fitness_best, fitness_prev_it, pass = 0;
   task *tasks_best[ARRAY_SIZE(tasks_initial)], *tasks_prev_it[ARRAY_SIZE(tasks_initial)];
 
   _Static_assert(TABU_LENGTH <
@@ -156,14 +156,14 @@ int main(void) {
   printout(tasks_best, fitness_best);
 
   for (i = 1; i <= ITERATIONS; i++) {
-    int time, fitness_curr_it;
+    unsigned int time, fitness_curr_it;
     task **tasks_temp, **perm;
 
-    for (time = 0, tasks_temp = tasks_prev_it, fitness_curr_it = INT_MAX;
+    for (time = 0, tasks_temp = tasks_prev_it, fitness_curr_it = UINT_MAX;
          tasks_temp < tasks_prev_it + ARRAY_SIZE(tasks_initial) - 1;
          time += (*tasks_temp++)->pj) {
-      if (!is_in_tabu(*tasks_temp, *(tasks_temp+1))) {
-        int fitness_temp = compute_fitness(*tasks_temp, *(tasks_temp+1), fitness_prev_it, time);
+      if (!is_in_tabu(tasks_temp[0], tasks_temp[1])) {
+        unsigned int fitness_temp = compute_fitness(tasks_temp[0], tasks_temp[1], fitness_prev_it, time);
         if (fitness_temp < fitness_curr_it) {
           fitness_curr_it = fitness_temp;
           perm = tasks_temp;
@@ -172,7 +172,7 @@ int main(void) {
     }
 
     swap(perm);
-    add_to_tabu(*perm, *(perm+1));
+    add_to_tabu(perm[0], perm[1]);
 
     fitness_prev_it = fitness_curr_it;
     if (fitness_curr_it < fitness_best) {
