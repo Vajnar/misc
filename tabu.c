@@ -39,7 +39,7 @@ static task tasks_initial[] = { {16,  67, 45,  2},
                                 {12,  25, 76,  9},
                                 {20,  43, 51, 11} };
 #if TABU_LENGTH > 0
-  static task* tabu[TABU_LENGTH*2];
+  static task* tabu[TABU_LENGTH][2];
 #endif
 
 static void iter_printout(task **tasks, int fitness, int iter) {
@@ -78,29 +78,28 @@ static void swap(task **a) {
 
 static int is_in_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 0
-  task **temp;
-
-  for (temp = tabu; temp < tabu + ARRAY_SIZE(tabu); temp += 2)
-    if (temp[0] == a && temp[1] == b)
+  for (task* (*temp)[2] = tabu; temp < tabu + ARRAY_SIZE(tabu); temp++) {
+    if ((*temp)[0] == a && (*temp)[1] == b)
       return 1;
+  }
 #endif
   return 0;
 }
 
 static void add_to_tabu(task* restrict a, task* restrict b) {
 #if TABU_LENGTH > 1
-  static task **temp = tabu;
+  static task* (*temp)[2] = tabu;
 
-  temp[0] = a;
-  temp[1] = b;
+  (*temp)[0] = a;
+  (*temp)[1] = b;
 
-  if (temp == tabu + ARRAY_SIZE(tabu)-2)
+  if (temp == tabu + ARRAY_SIZE(tabu) - 1)
     temp = tabu;
   else
-    temp += 2;
+    temp++;
 #elif TABU_LENGTH == 1
-  tabu[0] = a;
-  tabu[1] = b;
+  tabu[0][0] = a;
+  tabu[0][1] = b;
 #endif
 }
 
